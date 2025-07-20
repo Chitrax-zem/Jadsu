@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadsu - Login & Register</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 400px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo h1 {
+            color: #764ba2;
+            font-size: 3.5rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 2rem;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            border-bottom: 2px solid #ddd;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            border-bottom: 2px solid #764ba2;
+            color: #764ba2;
+            font-weight: 600;
+        }
+
+        .form-container {
+            display: none;
+        }
+
+        .form-container.active {
+            display: block;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus {
+            border-color: #764ba2;
+            outline: none;
+        }
+
+        .error-message {
+            color: #ff3333;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .social-login {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .social-login p {
+            color: #555;
+            margin-bottom: 1rem;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .social-icons button {
+            padding: 10px 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .social-icons button:hover {
+            background-color: #f5f5f5;
+        }
+
+        #welcome-container {
+            display: none;
+            text-align: center;
+        }
+
+        #welcome-container h2 {
+            color: #764ba2;
+            margin-bottom: 1rem;
+        }
+
+        #logout-btn {
+            background: #ff3333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 1rem;
+            .top-container {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                background: rgba(255, 255, 255, 0.95);
+                padding: 1rem;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+            }
+            
+           
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container" id="main-container">
+        <div class="logo">
+            <h1>JADSU</h1>
+        </div>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="login">Login</div>
+            <div class="tab" data-tab="register">Register</div>
+        </div>
+
+        <div class="form-container active" id="login-form">
+            <div class="input-group">
+                <label for="login-email">Email</label>
+                <input type="email" id="login-email" placeholder="Enter your email">
+                <div class="error-message" id="login-email-error"></div>
+            </div>
+
+            <div class="input-group">
+                <label for="login-password">Password</label>
+                <input type="password" id="login-password" placeholder="Enter your password">
+                <div class="error-message" id="login-password-error"></div>
+            </div>
+
+            <button class="submit-btn" onclick="login()">Login</button>
+        </div>
+
+        <div class="form-container" id="register-form">
+            <div class="input-group">
+                <label for="register-name">Full Name</label>
+                <input type="text" id="register-name" placeholder="Enter your full name">
+                <div class="error-message" id="register-name-error"></div>
+            </div>
+
+            <div class="input-group">
+                <label for="register-email">Email</label>
+                <input type="email" id="register-email" placeholder="Enter your email">
+                <div class="error-message" id="register-email-error"></div>
+            </div>
+
+            <div class="input-group">
+                <label for="register-password">Password</label>
+                <input type="password" id="register-password" placeholder="Enter your password">
+                <div class="error-message" id="register-password-error"></div>
+            </div>
+
+            <div class="input-group">
+                <label for="register-confirm-password">Confirm Password</label>
+                <input type="password" id="register-confirm-password" placeholder="Confirm your password">
+                <div class="error-message" id="register-confirm-password-error"></div>
+            </div>
+
+            <button class="submit-btn" onclick="register()">Register</button>
+        </div>
+    </div>
+
+    <div class="container" id="welcome-container">
+        <h2>Welcome to Jadsu</h2>
+        <p>You have successfully logged in!</p>
+        <button id="logout-btn" onclick="logout()">Logout</button>
+    </div>
+    
+   
+    <script>
+        // Dummy database for users
+        let users = [];
+
+        // Tab switching functionality
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                document.querySelectorAll('.form-container').forEach(form => {
+                    form.classList.remove('active');
+                });
+                document.getElementById(`${tab.dataset.tab}-form`).classList.add('active');
+            });
+        });
+
+        // Validation functions
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function validatePassword(password) {
+            return password.length >= 6;
+        }
+
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+
+        function clearErrors() {
+            document.querySelectorAll('.error-message').forEach(error => {
+                error.style.display = 'none';
+            });
+        }
+
+        // Register functionality
+        function register() {
+            clearErrors();
+            
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+
+            let isValid = true;
+
+            if (!name) {
+                showError('register-name-error', 'Name is required');
+                isValid = false;
+            }
+
+            if (!validateEmail(email)) {
+                showError('register-email-error', 'Please enter a valid email');
+                isValid = false;
+            }
+
+            if (!validatePassword(password)) {
+                showError('register-password-error', 'Password must be at least 6 characters');
+                isValid = false;
+            }
+
+            if (password !== confirmPassword) {
+                showError('register-confirm-password-error', 'Passwords do not match');
+                isValid = false;
+            }
+
+            if (isValid) {
+                if (users.some(user => user.email === email)) {
+                    showError('register-email-error', 'Email already registered');
+                    return;
+                }
+
+                users.push({ name, email, password });
+                alert('Registration successful! Please login.');
+                
+                // Switch to login tab
+                document.querySelector('[data-tab="login"]').click();
+            }
+        }
+
+        // Login functionality
+        function login() {
+            clearErrors();
+            
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+        
+            let isValid = true;
+        
+            if (!validateEmail(email)) {
+                showError('login-email-error', 'Please enter a valid email');
+                isValid = false;
+            }
+        
+            if (!password) {
+                showError('login-password-error', 'Password is required');
+                isValid = false;
+            }
+        
+            if (isValid) {
+                const user = users.find(u => u.email === email && u.password === password);
+                
+                if (user) {
+                    document.getElementById('main-container').style.display = 'none';
+                    document.getElementById('welcome-container').style.display = 'block';
+                    
+                    // Option 1: Redirect to another page
+                    window.location.href = 'index.html';
+                    
+                    // Option 2: Open a file in a new window/tab
+                    window.open('path/to/your/file.pdf', '_blank');
+                    
+                    // Option 3: Download a file
+                    const link = document.createElement('a');
+                    link.href = 'index.html';
+                    link.download = 'index.html';
+                    link.click();
+                } else {
+                    showError('login-email-error', 'Invalid email or password');
+                }
+            }
+        }
+        
+
+        // Logout functionality
+        function logout() {
+            document.getElementById('main-container').style.display = 'block';
+            document.getElementById('welcome-container').style.display = 'none';
+            
+            // Clear login form
+            document.getElementById('login-email').value = '';
+            document.getElementById('login-password').value = '';
+        }
+    </script>
+</body>
+</html>

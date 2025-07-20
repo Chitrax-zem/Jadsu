@@ -1,0 +1,939 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <title>Jadsu - Your Online Store</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+        }
+
+        .header {
+            background: #2c3e50;
+            padding: 20px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            color:rgb(240, 34, 226);
+            font-size: 35px;
+            font-weight: bold;
+            position: relative;
+        }
+        .logo::before{
+            content: "JADSU";
+            position: absolute;
+            width: 0%;
+            height: 100%;
+            overflow: hidden;
+            color:darkmagenta;
+            border-right:8px solid darkmagenta ;
+            transition:1s ease-in-out;
+        }
+        .logo:hover::before{
+            width:100%;
+            filter: drop-shadow(0 0 25px darkmagenta)5;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 24px;
+            position:relative;
+            text-decoration: none;
+            font-family:" poppins",sans-serif;
+            
+        }
+        .nav-links a:before,
+        .nav-links a:after{
+            content: "";
+            position: absolute;
+            height: 3px;
+            width: 0;
+            background-color: aquamarine;
+            transition: 0.5s;
+        }
+        .nav-links a:after{
+            left:0;
+            bottom:-10px;
+        }
+        .nav-links a:before{
+            right:0;
+            top:-10px;
+        }
+        .nav-links a:hover{
+            color:#3498db;
+        }
+        .nav-links a:hover:after,
+        .nav-links a:hover:before{
+            width:100%;
+        }
+       
+        .cart-icon {
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+        }
+
+        .main {
+            margin-top: 10px;
+            padding: 20px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .categories {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 10px 20px;
+            border: none;
+            background: #3498db;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .category-btn:hover {
+            background: #2980b9;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .product-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+        }
+
+        .product-info {
+            padding: 15px;
+        }
+
+        .product-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .product-price {
+            font-size: 20px;
+            color: #e74c3c;
+            margin-bottom: 15px;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 10px;
+            background: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .add-to-cart:hover {
+            background: #27ae60;
+        }
+
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            width: 300px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 10px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+         .marquee-w{
+          background-size: cover;
+          height: 110px;
+          margin-top: 10px;
+          background-color:rgb(138, 196, 227);
+         }
+         .marquee{
+            text-align: center;
+            color:black;
+            height:50px;
+             width:80%;
+             display:flex;
+            align-items: center;
+             justify-content: center;
+         }
+         .marquee-w:hover{
+            background-color: aquamarine;
+         }
+         .banner-text{
+            color:black;
+         }
+         .nav-search{
+            display:flex;
+            background-color: lavenderblush;
+            height:40px;
+            width:400px;
+            border-radius: 4px;
+         }
+         .search-select{
+            width:50px;
+            text-align: center;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+            border:none;
+            background-color:rgb(233, 221, 211);
+         }
+        .search-input{
+            width:360px;
+            font-size: 1rem;
+            border:none;
+            outline: none;
+            padding: 0 10px;
+        }
+        .search-icon{
+            width:45px;
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            background-color: #f0ad4e;
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+            cursor: pointer;
+        }
+        .search-icon:hover {
+            background-color: #ec971f;
+        }
+        
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 20px;
+            font-size: 18px;
+            color: #777;
+        }
+
+        .search-highlight {
+            background-color: #FFFF00;
+            font-weight: bold;
+        }
+          .foot-middle{
+            background-color:rgb(202, 230, 238);
+            color:black;
+            display:flex;
+            height: 120px;
+            justify-content: space-evenly;
+          }
+          .ul-1{
+            cursor: pointer;
+          }
+          .ul-2{
+            cursor: pointer;
+          }
+          .ul-3{
+            cursor: pointer;
+          }
+          .foot-last{
+            background-color:rgb(202, 230, 238);
+            color:black;
+            border-top: 0.8px solid black;
+            height: 100px;
+            display:inline-flex;
+            justify-content: space-evenly;
+            align-items: center;
+          }
+          .language{
+            color:black;
+            margin-left: 250px;
+          }
+          .language-text{
+            font-size:18px;
+            margin-right:25px;
+          }
+          
+          .language-list{
+            height:40px;
+            width:80px;
+            cursor: pointer;
+            margin-top: 10px;
+          }
+          .social{
+            font-size: medium;
+            align-items: center;
+            justify-content:center;
+            margin-left:310px;
+            width:280px;
+          }
+          .social:hover{
+            cursor: pointer;
+          }
+          .face:hover{
+            color: rgb(46, 139, 197);
+          }
+          .insta:hover{
+           color: rgb(196, 86, 196);
+          }
+          .twit:hover{
+            color:#2980b9;
+
+          }
+        
+
+          /** Founder**/
+          .my{
+            display:flex;
+            margin-left:280px;
+          }
+          .my-ff{
+            margin-top: 10px;
+            color:black;
+            size:18px;
+            font-size: 26px;
+          }
+          .my-name{
+            color:#5ec447;
+           font-size: 29px;
+            margin-top:15px;
+            margin-left: 25px;
+          }
+          .slider-container {
+            max-width: 1500px;
+            height:250px;
+            position: relative;
+            overflow: hidden;
+            background-size:cover;
+            margin-left:10px;
+            overflow: hidden;
+            object-fit: cover;
+            margin-top: 90px;
+            border: 2px solid black;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+          }
+          .slider-container:hover{
+            border:2px solid green;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+          }
+          
+          .slider {
+            display: flex;
+            transition: transform 0.5s ease;
+          }
+          
+          .slide {
+            min-width: 100%;
+            height: 250px;
+            background-size: cover;
+            object-fit: cover;
+            background-position: center;
+          }
+          
+          .slider-controls {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+          }
+          
+          .slider-btn {
+            background-color: rgba(255, 255, 255, 0.7);
+            color: #333;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+            margin: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+          }
+          
+          .slider-btn:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+          }
+          
+          .dots-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+          }
+          
+          .dot {
+            width: 12px;
+            height: 12px;
+            background-color: #bbb;
+            border-radius: 50%;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+          }
+          
+          .dot.active {
+            background-color: #333;
+          }
+        
+
+        @media (max-width: 768px) {
+            .nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .products {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+
+            .cart-modal {
+                width: 90%;
+                right: 5%;
+                
+            }
+        }
+        .moving-banner {
+            background-color: #f8f9fa;
+            padding: 10px 0;
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .banner-text {
+            position: absolute;
+            white-space: nowrap;
+            animation: moveText 20s linear infinite;
+            color: #e74c3c;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        @keyframes moveText {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        .main {
+            margin-top: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin-left: auto;
+        }
+    
+        
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">JADSU</div>
+            <div class="nav-search">
+                <select class="search-select" id="search-category">
+                    <option value="all">All</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="clothing">Clothing</option>
+                    <option value="books">Books</option>
+                </select>
+                <input class="search-input" id="search-input" placeholder="Search Jadsu">
+                <div class="search-icon" id="search-button">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+            </div>
+            <div class="nav-links">
+            <div class="nav-1">
+                <a href="#HOME">HOME</a>
+                </div>
+                <div class="nav-2">
+                <a href="#products">Products</a>
+                </div>
+                <div class="nav-3">
+                <a href="#about">About</a>
+                </div>
+                <div class="nav-4">
+                <a href="#contact">Contact</a>
+            </div>
+            </div>
+        </div>
+            <div class="cart-icon" onclick="toggleCart()">
+                🛒 <span class="cart-count">0</span>
+            </div>
+        </nav>
+    </header>
+    <div class="slider-container">
+        <div class="slider" id="slider">
+          <div class="slide" style="background-image: url('logo.png');"></div>
+          <div class="slide" style="background-image: url('https://img.freepik.com/premium-psd/online-shopping-with-discount_23-2148536749.jpg?w=1800');"></div>
+          <div class="slide" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZ6UpOgs4v4S0R79d7DtHJ0s-ufHB9N_XcBg&s');"></div>
+          <div class="slide" style="background-image: url('https://www.gizbot.com/img/2022/02/flipkart-tv-days-sale-2022-discount-offers-on-best-smart-tvs-to-buy-in-india-1644241008.jpg');"></div>
+          <div class="slide" style="background-image: url('https://blog.playstation.com/tachyon/2023/10/cd56722db7b991b3d7a33f1bafd55f80d0ac553d.png?resize=1088%2C612&crop_strategy=smart');"></div>
+        </div>
+        
+        <div class="slider-controls">
+          <button class="slider-btn" id="prevBtn">&#10094;</button>
+          <button class="slider-btn" id="nextBtn">&#10095;</button>
+        </div>
+        
+        <div class="dots-container" id="dotsContainer"></div>
+      </div>
+    
+
+    <main class="main">
+        <div class="categories">
+            <button class="category-btn" onclick="filterProducts('all')">All</button>
+            <button class="category-btn" onclick="filterProducts('electronics')">Electronics</button>
+            <button class="category-btn" onclick="filterProducts('clothing')">Clothing</button>
+            <button class="category-btn" onclick="filterProducts('books')">Books</button>
+            <button class="category-btn" onclick="filterProducts('shoes')">Shoes</button>
+        </div>
+
+        <div class="products" id="products-container">
+            <!-- Products will be dynamically added here -->
+        </div>
+    </main>
+
+    <div class="cart-modal" id="cart-modal">
+        <h2>Shopping Cart</h2>
+        <div id="cart-items">
+            <!-- Cart items will be dynamically added here -->
+        </div>
+        <button class="checkout-btn" onclick="checkout()">Checkout</button>
+    </div>
+   
+    <footer>
+        <div class="foot-middle">
+          <ul class="ul-1">
+             <h3>About Jadsu</h3>
+             <p>-Get too know about us</p> 
+             <p>-About Our Marketing</p>
+             <p>-Investor relations</p>
+             <p>-Our Deleveries</p>
+          </ul>
+          <ul class="ul-2">
+            <h3>Want to be our part</h3>
+            <p>-join us </p>
+            <p>-jobs and post</p>
+          </ul>
+          <ul class="ul-3">
+            <h3>Jadsu Payment System</h3>
+            <p>-Pay with Credit Card</p>
+            <p>-pay with EMI
+            <p>-Pay with Bonus point</p>
+          </ul>
+        </div>
+        <div class="foot-last">
+        <div class="language">
+            <h1 class="language-text">Language-</h1>
+          <select class="language-list">
+            <option>English</option>
+            <option>Hindi</option>
+            <option>Chinese</option>
+            <option>German</option>
+            <option>Italian</option>
+          </select>
+        </div>
+        <div class="social">
+            <ul>
+            <h3>Touch Base with us-</h2>
+            <h4 class="face">Facebook- <i class="fa-brands fa-facebook"></i></h4>
+            <h4 class="insta">Instagram- <i class="fa-brands fa-instagram"></i></h4>
+            <h4 class="twit">Twitter- <i class="fa-brands fa-twitter"></i></h4>
+        </ul>
+        </div>
+        <div class="my">
+          <h1 class="my-ff">Founder-</h1>
+          <h1 class="my-name">Chitransh Nigam</h1>
+        </div>
+        </div> 
+      </footer>
+      
+      
+
+    <script>
+        const products = [
+            { id: 1, name: 'Iphone 15 pro', price: 599.99, category: 'electronics', image: 'https://m.media-amazon.com/images/I/61Ony8rgwEL._AC_UF1000,1000_QL80_.jpg'},
+            { id: 2, name: 'Ideapad Gaming 3 ', price: 999.99, category: 'electronics', image: 'https://m.media-amazon.com/images/I/61CvWImrhGL.jpg' },
+            { id: 3, name: 'JBL Headphone', price: 29.99, category: 'electronics', image:'https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTWGvx3c-2Fklc9ACCCmDIvxQqv9RaqO2V6HDIG1TEdn3YrCYzRCa0ZE2b5vIKtYrOtWnNzGkc3EQSmqJArmruEZNWrCAXPayLpauzuNMXRf6pg9pMOE1kZ&usqp=CAE'},
+            { id: 4, name: 'T-Shirt', price: 29.99, category: 'clothing', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9AaQmrpfqUUTQDfyMzRsRgf7kInWgmWxDdQ&s' },   
+            { id: 5, name: 'Jeans', price: 49.99, category: 'clothing', image: 'https://m.media-amazon.com/images/I/81tTLRZnpdL._AC_UY1100_.jpg' },
+            { id: 6, name: 'Novel', price: 19.99, category: 'books', image: 'https://images-platform.99static.com//qAz_iiAo15Jhj6WItGmNyVR-1nE=/254x83:940x769/fit-in/500x500/projects-files/34/3412/341274/5e657874-9a17-4f86-a4dd-8dd720afd636.jpg' },
+            { id: 7, name: 'Cookbook', price: 24.99, category: 'books', image: 'https://cdn.loveandlemons.com/wp-content/uploads/2023/01/cookbook3.jpg' },
+            { id: 8, name: 'Shirt', price: 29.99, category: 'clothing', image: 'https://assets.myntassets.com/w_412,q_60,dpr_2,fl_progressive/assets/images/19761202/2022/9/15/6b924cc5-241d-4931-ba6f-1307e357d6001663220252210StyleQuotientWomenBlackFormalShirt1.jpg'},
+            { id: 9, name: 'Samsung', price: 49.99, category: 'electronics', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLRsvfNpCiTkytyyJWWW8SFPRhgAfdJ7F00g&s' },
+            { id: 10, name: 'Novel', price: 19.99, category: 'books', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBg-Tdi1NPrztGnTOzA7En9E-g6WDu_xt7Ww&s' },
+            { id: 11, name: 'Redmi', price: 24.99, category: 'electronics', image: 'https://cdn.mos.cms.futurecdn.net/fBLWy65De7iw6gHfy33ANK-1200-80.jpg' },
+            { id: 12, name: 'Rolex-v1', price: 24.99, category: 'electronics', image:'https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcQffCUC2a0iJkkn46dF_RnSggy9aGcWdixKLBRjA8sTc77Wv8XEtB_4MFPFLVAu129pnmwI61QGUqJFrMnX7W_ZLMN8B4TgAhgNsljhb6hG2snaAmDzYRDrQQ&usqp=CAE'},
+            { id: 13, name: 'Rolex-v2', price: 24.99, category: 'electronics', image:'https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSRfZt1rfMwODWaztOAm2drKiBIh16e9URP8aw2wnq3rCjcSso448B1Bxyjq1ad2pEBR_9YUDgz4KMEAzG2aQ0WMAzYM023cZ-I8s98i_6SqNaK0R3hGX_9&usqp=CAE'},
+            { id: 14, name: 'Gas Stove', price: 24.99, category: 'Kitchen', image:'https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcR63MzflnmpKjGkjK8BYQyBCNjgUqwYjda3_yv-phrXqUugUrWYu9c4w365HuRwVFtAOdhfggWiJ0Lim6em8rYmBjQLfJ4DGBZL-2KAHjipySVSz8YVJWK9pg&usqp=CAE'},
+            { id: 15, name: '4-in-1 Container', price: 24.99, category: 'Kitchen', image:'https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQVOtCzBd75RQi7O8lEZ4puv_Zkt8w4ImKm-bi05coosraT7PHa_PyFR7Kx2t-vn3V2iUI5YHsPvPzJel2pDFpK6ZQQjrQbTxpEIqhp0D8Li6Y-TEdfgNYlqw&usqp=CAE'},
+            { id: 16, name: 'Designer Sofa', price: 24.99, category: 'furniture', image:'https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcRXCxv_2QuAfgPINVDVV2TSCV1UGsW_Wp9Kb9Lr5rPUpPIzpadvFObkSl40KoWsaHPqigntLD5764lXyXW58wBE0aOfQgiF9Ejuliximn0&usqp=CAE'},
+            { id: 17, name: 'Dining Table', price: 24.99, category: 'furniture', image:'https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcT2hzSEyxHwnjN_m5xk_VqClo3rMvowFbRcs9AbmSE2rWT9zjjSJLsJTZ1wcClU26PeHcLtOFUzk0Tl65_K_JXPQFzldDpIjN5yKQb7QlmTd9AHtWIY9Hxe&usqp=CAE'},
+            { id: 18, name: 'Boat airdopes 131', price: 24.99, category: 'electronics', image:'https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcSSUgLzQ5DF_y5c2Qp7x3YMwc2qLHl4Xk2wC2Ac5VQ8lE_Sx7kHT_akgDG601Qe062P1oVlR3whDskqliQA6JYj8awnipsg&usqp=CAE'},
+            { id: 19, name: 'Air Jordan 4', price: 24.99, category: 'shoes', image:'https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRFLYnXLjVMJLvHb5n_FaQAV9TtZKsvQCV9K_qy9mBIT02cGw579FnohTf2LR_JpyOvbHxg9vxltzPHgOYb2CApW2Xj7SaPl84hipGD2tTqw9RAly9LiH7h&usqp=CAE'},
+            { id: 20, name: 'Leather Shoe', price: 24.99, category: 'shoes', image:'https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcQBWtCyFt1JlLDeT308zP2wPOCmHv7Wqfady-h7dwqAITOmmI1EDAgsZV_AE1affdGzdo2x__Z5Q0Z3xEETCYN_H8sJrT84XjPsi20gNg0VDV92vYNnFY3F&usqp=CAE'},
+            ];
+
+        let cart = [];
+        let currentDisplayedProducts = products; // Track currently displayed products
+
+        function displayProducts(productsToDisplay = products, category = 'all') {
+            const container = document.getElementById('products-container');
+            container.innerHTML = '';
+            
+            let filteredProducts = productsToDisplay;
+            
+            // Apply category filter if it's not 'all'
+            if (category !== 'all') {
+                filteredProducts = productsToDisplay.filter(p => p.category === category);
+            }
+            
+            currentDisplayedProducts = filteredProducts;
+            
+            if (filteredProducts.length === 0) {
+                container.innerHTML = '<div class="no-results">No products found matching your search.</div>';
+                return;
+            }
+
+            filteredProducts.forEach(product => {
+                const productCard = `
+                    <div class="product-card">
+                        <img src="${product.image}" alt="${product.name}" class="product-image">
+                        <div class="product-info">
+                            <h3 class="product-title">${product.name}</h3>
+                            <p class="product-price">$${product.price}</p>
+                            <button class="add-to-cart" onclick="addToCart(${product.id})">Add to Cart</button>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += productCard;
+            });
+        }
+
+        function searchProducts() {
+            const searchTerm = document.getElementById('search-input').value.trim().toLowerCase();
+            const searchCategory = document.getElementById('search-category').value;
+            
+            if (!searchTerm) {
+                filterProducts(searchCategory); // If search is empty, just show filtered by category
+                return;
+            }
+            
+            // First filter by category if needed
+            let categoryFiltered = searchCategory === 'all' ? 
+                products : 
+                products.filter(p => p.category === searchCategory);
+                
+            // Then filter by search term within the category results
+            const searchResults = categoryFiltered.filter(product => {
+                return product.name.toLowerCase().includes(searchTerm) || 
+                       product.category.toLowerCase().includes(searchTerm) ||
+                       product.price.toString().includes(searchTerm);
+            });
+            
+            // Display the filtered results
+            displayProducts(searchResults, 'all'); // 'all' because we already filtered by category
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            cart.push(product);
+            updateCartCount();
+            updateCartItems();
+        }
+
+        function updateCartCount() {
+            document.querySelector('.cart-count').textContent = cart.length;
+        }
+
+        function updateCartItems() {
+            const cartItems = document.getElementById('cart-items');
+            cartItems.innerHTML = '';
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p>Your cart is empty</p>';
+                return;
+            }
+            
+            let total = 0;
+            
+            cart.forEach((item, index) => {
+                total += item.price;
+                const cartItem = `
+                    <div class="cart-item">
+                        <span>${item.name}</span>
+                        <span>$${item.price.toFixed(2)}</span>
+                        <button onclick="removeFromCart(${index})">❌</button>
+                    </div>
+                `;
+                cartItems.innerHTML += cartItem;
+            });
+            
+            cartItems.innerHTML += `<div class="cart-item"><strong>Total:</strong> <strong>$${total.toFixed(2)}</strong></div>`;
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartCount();
+            updateCartItems();
+        }
+
+        function toggleCart() {
+            const cartModal = document.getElementById('cart-modal');
+            cartModal.style.display = cartModal.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            alert(`Total: $${total.toFixed(2)}\nThank you for shopping with us!`);
+            cart = [];
+            updateCartCount();
+            updateCartItems();
+            toggleCart();
+        }
+        
+        function filterProducts(category) {
+            displayProducts(products, category);
+            
+            // Update the category select in search bar to match
+            document.getElementById('search-category').value = category;
+            
+            // Clear search input when changing categories
+            document.getElementById('search-input').value = '';
+        }
+
+        // Set up event listeners for search
+        document.getElementById('search-button').addEventListener('click', searchProducts);
+        document.getElementById('search-input').addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                searchProducts();
+            }
+        });
+        
+        // Also search when category changes if there's text in the search box
+        document.getElementById('search-category').addEventListener('change', function() {
+            const searchInput = document.getElementById('search-input');
+            if (searchInput.value.trim()) {
+                searchProducts();
+            } else {
+                filterProducts(this.value);
+            }
+        });
+
+        // Initial load
+        displayProducts();
+        
+        // Close cart when clicking outside
+        window.onload = function() {
+            const slider = document.getElementById('slider');
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const dotsContainer = document.getElementById('dotsContainer');
+            
+            let currentIndex = 0;
+            const totalSlides = slides.length;
+            
+            // Create dots for navigation
+            for (let i = 0; i < totalSlides; i++) {
+              const dot = document.createElement('div');
+              dot.classList.add('dot');
+              if (i === 0) dot.classList.add('active');
+              dot.addEventListener('click', () => goToSlide(i));
+              dotsContainer.appendChild(dot);
+            }
+            
+            // Get all dots
+            const dots = document.querySelectorAll('.dot');
+            
+            // Function to update the slider position
+            function updateSliderPosition() {
+              slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+              
+              // Update active dot
+              dots.forEach((dot, index) => {
+                if (index === currentIndex) {
+                  dot.classList.add('active');
+                } else {
+                  dot.classList.remove('active');
+                }
+              });
+            }
+            
+            // Function to go to a specific slide
+            function goToSlide(index) {
+              currentIndex = index;
+              updateSliderPosition();
+            }
+            
+            // Function to go to the next slide
+            function nextSlide() {
+              currentIndex = (currentIndex + 1) % totalSlides;
+              updateSliderPosition();
+            }
+            
+            // Function to go to the previous slide
+            function prevSlide() {
+              currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+              updateSliderPosition();
+            }
+            
+            // Add event listeners for the buttons
+            if (prevBtn) {
+              prevBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                prevSlide();
+              });
+            }
+            
+            if (nextBtn) {
+              nextBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                nextSlide();
+              });
+            }
+            
+            // Initialize slider position
+            updateSliderPosition();
+            
+            // Auto-slide functionality
+            let interval = setInterval(nextSlide, 5000);
+            
+            // Pause auto-slide on hover
+            slider.addEventListener('mouseenter', () => {
+              clearInterval(interval);
+            });
+            
+            slider.addEventListener('mouseleave', () => {
+              interval = setInterval(nextSlide, 5000);
+            });
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+              if (e.key === 'ArrowLeft') {
+                prevSlide();
+              } else if (e.key === 'ArrowRight') {
+                nextSlide();
+              }
+            });
+            
+            // Add touch support
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            slider.addEventListener('touchstart', (e) => {
+              touchStartX = e.changedTouches[0].screenX;
+            });
+            
+            slider.addEventListener('touchend', (e) => {
+              touchEndX = e.changedTouches[0].screenX;
+              handleSwipe();
+            });
+            
+            function handleSwipe() {
+              // Swipe left
+              if (touchEndX < touchStartX - 50) {
+                nextSlide();
+              }
+              // Swipe right
+              if (touchEndX > touchStartX + 50) {
+                prevSlide();
+              }
+            }
+            
+            console.log("Slider initialized with " + totalSlides + " slides");
+          };
+    </script>
+</body>
+</html>
